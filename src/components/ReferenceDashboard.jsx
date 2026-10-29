@@ -28,7 +28,8 @@ export default function ReferenceDashboard({ month, expenses, incomes, pending, 
   const items = chartKind === "despesas" ? currentExpenses : currentIncomes;
   const chartData = categories.map((c,i) => ({ id:c.id, name:c.label, color:c.color || palette[i%palette.length], value:total(items.filter(r => r.categoriaId === c.id)) })).filter(c=>c.value>0).sort((a,b)=>b.value-a.value);
   const chartMax = Math.max(1, ...chartData.map(d => d.value));
-  const months = useMemo(() => Array.from({length:6},(_,i) => changeMonth(month,i-5)),[month]);
+  const currentYear = new Date().getFullYear();
+  const months = useMemo(() => Array.from({length:12},(_,i) => `${currentYear}-${String(i+1).padStart(2,"0")}`),[currentYear]);
   const trend = months.map(key => ({
     key, label:monthLabel(key),
     expenses:total(expenses.filter(r=>!r.excluido && r.vencimento?.slice(0,7)===key)),
@@ -47,9 +48,9 @@ export default function ReferenceDashboard({ month, expenses, incomes, pending, 
       <div className="ref-kpi"><div className="ref-kpi-caption"><span>Contas pendentes</span><span className="ref-kpi-icon amber"><CalendarClock size={19}/></span></div><strong>{brl(total([...pending,...overdue]))}</strong><small>{pending.length+overdue.length} contas aguardando pagamento</small></div>
     </div>
     <div className="ref-visual-grid">
-      <section className="ref-visual-card"><header className="ref-card-header"><div><h2><TrendingUp size={18}/> Evolução financeira</h2><p>Receitas e despesas nos últimos seis meses</p></div></header>
+      <section className="ref-visual-card"><header className="ref-card-header"><div><h2><TrendingUp size={18}/> Evolução financeira</h2><p>Receitas e despesas de janeiro a dezembro de {currentYear}</p></div></header>
         <div className="ref-chart-legend"><span><i className="ref-green"/>Receitas</span><span><i className="ref-red"/>Despesas</span></div>
-        <div className="ref-trend-chart" role="img" aria-label="Gráfico de receitas e despesas dos últimos seis meses">
+        <div className="ref-trend-chart" role="img" aria-label={`Gráfico de receitas e despesas de janeiro a dezembro de ${currentYear}`}>
           {trend.map(row => <div className="ref-trend-column" key={row.key} title={row.key+" | Receitas: "+brl(row.incomes)+" | Despesas: "+brl(row.expenses)}><div className="ref-trend-bars"><span className="ref-trend-bar ref-trend-income" style={{height:(row.incomes/maxTrend*100)+"%"}}/><span className="ref-trend-bar ref-trend-expense" style={{height:(row.expenses/maxTrend*100)+"%"}}/></div><span className="ref-trend-label">{row.label}</span></div>)}
         </div>
       </section>
