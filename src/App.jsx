@@ -1,3 +1,5 @@
+import ReferenceFeatures from "./components/ReferenceFeatures.jsx";
+import "./reference-features.css";
 import React, { useEffect, useMemo, useState } from "react";
 
 import {
@@ -1123,6 +1125,7 @@ function App() {
             )}
           </section>
           <aside className="right-col">
+            <ReferenceFeatures month={month} expenses={expenses} incomes={incomes} exportData={exportData} />
             <section className="panel">
               <h3>
                 <span>
