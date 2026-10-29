@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, CalendarClock, CheckCircle2, ChevronDown, ChevronUp, CircleAlert, Plus, TrendingUp, Wallet, X } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Check, CheckCircle2, ChevronDown, ChevronUp, CircleAlert, CreditCard, Percent, TrendingUp } from "lucide-react";
 import { brl, EXPENSE_CATEGORIES, INCOME_CATEGORIES } from "../finance";
 import "./ReferenceDashboard.css";
 
@@ -36,16 +36,75 @@ export default function ReferenceDashboard({ month, expenses, incomes, pending, 
     incomes:total(incomes.filter(r=>!r.excluido && getDate(r).slice(0,7)===key))
   }));
   const maxTrend = Math.max(1,...trend.flatMap(r=>[r.expenses,r.incomes]));
+  const paidValue = total(paid);
+  const outstanding = [...pending, ...overdue];
+  const outstandingValue = total(outstanding);
+  const totalMonth = paidValue + outstandingValue;
+  const progress = totalMonth ? Math.min(100,Math.round(paidValue/totalMonth*100)) : 0;
+  const today = new Date();
+  const todayKey = [today.getFullYear(),String(today.getMonth()+1).padStart(2,"0"),String(today.getDate()).padStart(2,"0")].join("-");
+  const dueToday = outstanding.filter(r=>r.vencimento===todayKey);
+  const yearOfMonth = Number(month.slice(0,4));
+  const indexOfMonth = Number(month.slice(5,7))-1;
+  const firstWeekday = new Date(yearOfMonth,indexOfMonth,1).getDay();
+  const days = new Date(yearOfMonth,indexOfMonth+1,0).getDate();
+  const monthName = new Date(yearOfMonth,indexOfMonth,1).toLocaleDateString("pt-BR",{month:"long"});
+  const categoryExpenses = EXPENSE_CATEGORIES.map(c=>({...c,value:total(currentExpenses.filter(r=>r.categoriaId===c.id))})).filter(c=>c.value>0).sort((a,b)=>b.value-a.value);
+  const dayStatus = date => {
+    const records = currentExpenses.filter(r=>r.vencimento===date);
+    if(records.some(r=>r.status!=="pago" && date<todayKey)) return "late";
+    if(records.some(r=>r.status!=="pago"))return "pending";
+    if(records.length)return "paid";
+    return "";
+  };
+
   return <div className="ref-dashboard">
-    <section className="ref-welcome">
-      <div><span className="ref-eyebrow">PAINEL FINANCEIRO</span><h1>Visão geral <span>das suas finanças</span></h1><p>Controle receitas, despesas e vencimentos em um só lugar.</p></div>
-      <div className="ref-welcome-actions"><button className="ref-add-secondary" onClick={onAddIncome}><ArrowUpRight size={17}/> Nova receita</button><button className="ref-add-primary" onClick={onAddExpense}><Plus size={17}/> Nova despesa</button></div>
-    </section>
-    <div className="ref-kpi-grid">
-      <div className="ref-kpi"><div className="ref-kpi-caption"><span>Receitas do mês</span><span className="ref-kpi-icon green"><ArrowUpRight size={19}/></span></div><strong>{brl(incomeTotal)}</strong><small>{currentIncomes.length} lançamentos de receita</small></div>
-      <div className="ref-kpi"><div className="ref-kpi-caption"><span>Despesas do mês</span><span className="ref-kpi-icon red"><ArrowDownRight size={19}/></span></div><strong>{brl(expenseTotal)}</strong><small>{currentExpenses.length} lançamentos de despesa</small></div>
-      <div className="ref-kpi"><div className="ref-kpi-caption"><span>Saldo do mês</span><span className={"ref-kpi-icon "+(balance>=0?"green":"red")}><Wallet size={19}/></span></div><strong className={balance<0?"ref-negative":"ref-positive"}>{brl(balance)}</strong><small>Receitas menos despesas</small></div>
-      <div className="ref-kpi"><div className="ref-kpi-caption"><span>Contas pendentes</span><span className="ref-kpi-icon amber"><CalendarClock size={19}/></span></div><strong>{brl(total([...pending,...overdue]))}</strong><small>{pending.length+overdue.length} contas aguardando pagamento</small></div>
+    <div className="ref-home-layout">
+      <div className="ref-home-main">
+        <div className="ref-home-kpis">
+          <article className="ref-home-kpi"><div className="ref-home-kpi-head"><span className="ref-home-kpi-icon navy"><CreditCard size={16}/></span><span className="ref-home-tag">ESTE MÊS</span></div><p>TOTAL A PAGAR</p><strong>{brl(outstandingValue)}</strong><small>{outstanding.length} contas pendentes</small></article>
+          <article className="ref-home-kpi"><div className="ref-home-kpi-head"><span className="ref-home-kpi-icon mint"><TrendingUp size={16}/></span><span className="ref-home-tag green">PAGO</span></div><p>TOTAL PAGO</p><strong>{brl(paidValue)}</strong><small>{paid.length} quitadas</small></article>
+          <article className="ref-home-kpi warning"><div className="ref-home-kpi-head"><span className="ref-home-kpi-icon coral"><CircleAlert size={16}/></span><span className="ref-home-tag red">ATENÇÃO</span></div><p>ATRASADAS</p><strong>{overdue.length}</strong><small>{overdue.length ? "Ação necessária" : "Nenhuma atrasada"}</small></article>
+          <article className="ref-home-kpi"><div className="ref-home-kpi-head"><span className="ref-home-kpi-icon pale"><CalendarDays size={16}/></span><span className="ref-home-tag">HOJE</span></div><p>VENCE HOJE</p><strong>{dueToday.length}</strong><small>{dueToday.length ? brl(total(dueToday))+" a vencer" : "Nenhuma hoje"}</small></article>
+        </div>
+        <div className="ref-home-lower">
+          <section className="ref-home-progress">
+            <div className="ref-home-section-head"><h2><span className="ref-home-round-icon"><Percent size={16}/></span>Progresso do mês</h2><span>{progress}% pago</span></div>
+            <div className="ref-home-progress-track"><i style={{width:progress+"%"}} /></div>
+            <div className="ref-home-progress-details"><span>Pago {brl(paidValue)}</span><span>Falta {brl(outstandingValue)}</span></div>
+          </section>
+          <section className="ref-home-calendar">
+            <div className="ref-home-section-head"><h2><CalendarDays size={16}/> Calendário {monthName}</h2><small>{yearOfMonth}</small></div>
+            <div className="ref-home-calendar-grid">
+              {["D","S","T","Q","Q","S","S"].map((day,i)=><span className="ref-home-weekday" key={"wd"+i}>{day}</span>)}
+              {Array.from({length:firstWeekday},(_,i)=><span key={"blank"+i}/>)}
+              {Array.from({length:days},(_,i)=>{
+                const day=i+1,date=month+"-"+String(day).padStart(2,"0");
+                const status=dayStatus(date);
+                return <span key={date} title={date} className={["ref-home-day",status,date===todayKey?"is-today":""].join(" ")}>{day}</span>;
+              })}
+            </div>
+          </section>
+        </div>
+      </div>
+      <aside className="ref-home-side">
+        <section className="ref-home-summary">
+          <h2>Resumo • {monthName} de {yearOfMonth}<span><TrendingUp size={16}/></span></h2>
+          <div className="ref-home-summary-line"><div><span>PAGO</span><strong>{brl(paidValue)}</strong></div><div className="ref-home-dark-track"><i style={{width:progress+"%"}}/></div></div>
+          <div className="ref-home-summary-line"><div><span>PENDENTE</span><strong>{brl(outstandingValue)}</strong></div><div className="ref-home-dark-track"><i className="pending" style={{width:(100-progress)+"%"}}/></div></div>
+          <div className="ref-home-summary-total"><span>Total do mês</span><strong>{brl(totalMonth)}</strong></div>
+        </section>
+        <section className="ref-home-category">
+          <h2><span className="ref-home-round-icon"><Percent size={15}/></span>Por categoria</h2>
+          {categoryExpenses.length ? categoryExpenses.slice(0,5).map((c,i)=>{
+            const pct=expenseTotal ? Math.round(c.value/expenseTotal*100) : 0;
+            return <div className="ref-home-category-row" key={c.id}>
+              <div className="ref-home-category-meta"><span className="ref-home-category-symbol" style={{background:c.bg||"#e2e8f0",color:c.color||"#334155"}}>{(c.label||"C").slice(0,1)}</span><strong>{c.label}</strong><small>{pct}% • {brl(c.value)}</small></div>
+              <div className="ref-home-category-track"><i style={{width:pct+"%",background:c.color||"#0f172a"}}/></div>
+            </div>;
+          }) : <p className="ref-empty">Nenhuma despesa neste mês.</p>}
+        </section>
+      </aside>
     </div>
     <div className="ref-visual-grid">
       <section className="ref-visual-card"><header className="ref-card-header"><div><h2><TrendingUp size={18}/> Evolução financeira</h2><p>Receitas e despesas de janeiro a dezembro de {currentYear}</p></div></header>
