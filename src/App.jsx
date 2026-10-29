@@ -1159,12 +1159,13 @@ function App() {
         </footer>
       </main>
       <div className="floating">
+        <button className="float-expense" onClick={() => openForm("despesas")}>
+          <Icon name="Minus" />
+          <Icon name="HandCoins" /> Despesa
+        </button>
         <button className="float-income" onClick={() => openForm("receitas")}>
           <Icon name="Plus" />
           <Icon name="Wallet" /> Receita
-        </button>
-        <button className="float-expense" onClick={() => openForm("despesas")}>
-          <Icon name="Plus" /> Despesa
         </button>
       </div>
       {toast && (
@@ -1337,7 +1338,7 @@ function App() {
                   </button>
                 ))}
               </div>
-              <div className="field-title">
+              {/* <div className="field-title">
                 Forma Pix/Boleto/Cartão/Dinheiro
               </div>
               <div className="option-grid methods">
@@ -1351,7 +1352,7 @@ function App() {
                     {m}
                   </button>
                 ))}
-              </div>
+              </div> */}
               {modal.kind === "despesas" && (
                 <>
                   <div className="field-title">Tipo</div>
@@ -1385,6 +1386,25 @@ function App() {
                       />
                     </label>
                   )}
+
+                {form.tipo === "recorrente" && !modal.id && (
+                <label>
+                    Repetir por quantos meses?
+                    <input
+                    type="number"
+                    min="1"
+                    max="360"
+                    value={form.recorrenciasTotal ?? 12}
+                    onChange={(e) =>
+                        setForm({
+                        ...form,
+                        recorrenciasTotal: e.target.value,
+                        })
+                    }
+                    />
+                </label>
+                )}
+
                 </>
               )}
               <label>

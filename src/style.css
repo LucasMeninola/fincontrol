@@ -1309,3 +1309,55 @@ body {font-family:inherit; line-height:1.5; -webkit-font-smoothing:antialiased;}
  .panel {padding:16px;}
  .banner {padding:15px;}
 }
+
+
+/* ==========================================
+   POP-UP DE CADASTRO DE RECEITAS E DESPESAS
+   ========================================== */
+
+/* Define o tamanho e a estrutura do pop-up */
+.overlay > form.dialog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  max-height: 92dvh;
+  overflow: hidden;
+}
+
+/* Cabeçalho permanece visível */
+.overlay > form.dialog .dialog-head {
+  flex-shrink: 0;
+}
+
+/* Somente os campos internos têm rolagem */
+.overlay > form.dialog .dialog-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 16px;
+}
+
+/* Botão salvar permanece visível na parte inferior */
+.overlay > form.dialog .dialog-body > button.btn.primary.full {
+  position: sticky;
+  bottom: -16px;
+  z-index: 2;
+
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 48px;
+
+  background: #10b981;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+
+  border-radius: 12px;
+  box-shadow: 0 -8px 18px var(--panel);
+}
+
+.overlay > form.dialog .dialog-body > button.btn.primary.full:hover {
+  background: #059669;
+}

@@ -6,6 +6,13 @@ export const EXPENSE_CATEGORIES = [
   {id:'lazer',label:'Lazer',color:'#7c3aed',bg:'#ede9fe',icon:'Clapperboard'},
   {id:'assinaturas',label:'Assinaturas',color:'#2563eb',bg:'#dbeafe',icon:'Repeat2'},
   {id:'trabalho',label:'Trabalho',color:'#0f766e',bg:'#ccfbf1',icon:'Briefcase'},
+  {
+  id: "cartao",
+  label: "Cartão",
+  color: "#6366f1",
+  bg: "#e0e7ff",
+  icon: "CreditCard",
+  },
   {id:'outros',label:'Outros',color:'#64748b',bg:'#f1f5f9',icon:'CircleEllipsis'}
 ];
 export const INCOME_CATEGORIES = [
