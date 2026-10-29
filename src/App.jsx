@@ -332,12 +332,47 @@ function App() {
           });
         }
         await batch.commit();
-      } else {
+        } else if (kind === "despesas" && form.tipo === "recorrente") {
+
+        const quantidade = Math.max(
+            1,
+            Math.min(360, Number(form.recorrenciasTotal) || 12)
+        );
+
+        const batch = writeBatch(db);
+
+        for (let i = 0; i < quantidade; i++) {
+            const ref = doc(path(user.uid, kind));
+
+            batch.set(ref, {
+            ...base,
+
+            // Mantém o valor integral em todos os meses
+            valor: value,
+
+            // Avança um mês a cada lançamento
+            vencimento: addMonths(base.vencimento, i),
+            data: addMonths(base.data, i),
+
+            tipo: "recorrente",
+            recorrente: true,
+
+            recorrenciaNumero: i + 1,
+            recorrenciasTotal: quantidade,
+
+            status: "pendente",
+            createdAt: serverTimestamp(),
+            });
+        }
+
+        await batch.commit();
+
+        } else {
         await addDoc(path(user.uid, kind), {
-          ...base,
-          createdAt: serverTimestamp(),
+            ...base,
+            createdAt: serverTimestamp(),
         });
-      }
+        }
       setModal(null);
       alertUser("Lançamento salvo no Firestore.");
     } catch (e) {
