@@ -1,0 +1,30 @@
+
+/* Interface de referência: calendário, ferramentas e pop-ups. */
+.ref-panel h3 span { display:flex; align-items:center; gap:8px; }
+.ref-calendar { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px; margin-top:14px; }
+.ref-weekday { text-align:center; color:var(--text-faint,#94a3b8); font-size:10px; padding-bottom:5px; }
+.ref-day { min-width:0; min-height:37px; border:1px solid var(--border,#e2e8f0); border-radius:10px; background:transparent; color:inherit; font-size:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; }
+.ref-day:hover,.ref-day.active { border-color:#10b981; background:rgba(16,185,129,.12); }
+.ref-dots { display:flex; gap:2px; min-height:4px; }
+.ref-dot { display:block; width:4px; height:4px; border-radius:50%; }
+.ref-dot.expense { background:#ef4444; } .ref-dot.income { background:#10b981; }
+.ref-day-details { margin-top:12px; padding-top:12px; border-top:1px solid var(--border,#e2e8f0); font-size:12px; }
+.ref-entry { display:flex; justify-content:space-between; gap:8px; padding:8px 0; border-bottom:1px solid var(--border,#e2e8f0); }
+.ref-entry b { white-space:nowrap; color:#ef4444; } .ref-entry b.ref-positive { color:#10b981; }
+.ref-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:14px; }
+.ref-actions button { border:1px solid var(--border,#e2e8f0); border-radius:12px; padding:12px 8px; display:flex; flex-direction:column; align-items:center; gap:7px; color:inherit; font-size:12px; background:transparent; }
+.ref-actions button:hover { background:rgba(16,185,129,.1); border-color:#10b981; }
+.ref-overlay { position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(2,6,23,.65); backdrop-filter:blur(5px); }
+.ref-dialog { width:min(100%,460px); max-height:90vh; overflow-y:auto; border-radius:20px; padding:24px; background:var(--panel,var(--surface,#ffffff)); color:var(--text,#0f172a); box-shadow:0 24px 65px #0005; }
+.dark .ref-dialog { background:#1e293b; color:#f8fafc; }
+.ref-dialog-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.ref-dialog-head h2 { font-size:19px; font-weight:800; } .ref-dialog-head button { color:inherit; }
+.ref-dialog p { font-size:13px; opacity:.75; margin:12px 0 20px; }
+.ref-label { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; font-size:13px; }
+.ref-label select { padding:12px; border:1px solid #94a3b8; border-radius:10px; color:inherit; background:transparent; }
+.ref-primary,.ref-secondary { display:flex; justify-content:center; align-items:center; gap:8px; border-radius:12px; width:100%; padding:12px; margin-top:9px; }
+.ref-primary { background:#0f766e; color:white; } .ref-secondary { border:1px solid #94a3b8; color:inherit; }
+.ref-setting { display:flex; align-items:center; justify-content:space-between; gap:12px; border-bottom:1px solid #94a3b844; padding:16px 0; font-size:13px; }
+.ref-setting span { display:flex; gap:9px; align-items:center; }
+.ref-dialog small { display:block; margin-top:14px; opacity:.7; line-height:1.5; }
+@media(max-width:600px){.ref-dialog{padding:18px}.ref-actions{grid-template-columns:repeat(2,minmax(0,1fr));}}
