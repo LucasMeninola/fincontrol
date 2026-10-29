@@ -1,3 +1,4 @@
+import ReferenceDashboard from "./components/ReferenceDashboard.jsx";
 import ReferenceFeatures from "./components/ReferenceFeatures.jsx";
 import "./reference-features.css";
 import React, { useEffect, useMemo, useState } from "react";
@@ -719,96 +720,16 @@ function App() {
             <button onClick={() => setNoticeOpen(false)}>Fechar</button>
           </div>
         )}
-        <div className={`banner ${balance < 0 ? "negative" : ""}`}>
-          <div className="banner-icon">
-            <Icon name="TrendingUp" size={21} />
-          </div>
-          <div>
-            <b>
-              {balance >= 0 ? "☑ Saldo positivo" : "⚠ Saldo negativo"} de{" "}
-              {brl(Math.abs(balance))} este mês
-            </b>
-            <p>
-              Receitas: {brl(incomeTotal)} • Despesas: {brl(expenseTotal)} •{" "}
-              {balance >= 0 ? "Sobrando" : "Faltando"} {brl(Math.abs(balance))}{" "}
-              para guardar ou investir.
-            </p>
-          </div>
-          <span className="banner-pill">
-            {balance >= 0 ? "POSITIVO" : "NEGATIVO"}
-          </span>
-        </div>
-        <section className="stat-grid">
-          {[
-            {
-              label: "A PAGAR",
-              value: sum(pending),
-              detail: `${pending.length} contas pendentes`,
-              icon: "Clock",
-              tone: "neutral",
-            },
-            {
-              label: "PAGO",
-              value: sum(paid),
-              detail: `${paid.length} pagas`,
-              icon: "Check",
-              tone: "green",
-            },
-            {
-              label: "ATRASADO",
-              value: sum(overdue),
-              detail: `${overdue.length} atrasadas`,
-              icon: "AlertTriangle",
-              tone: "red",
-            },
-            {
-              label: "VENCE HOJE",
-              value: sum(
-                activeExpenses.filter(
-                  (r) => r.status !== "pago" && r.vencimento === todayISO(),
-                ),
-              ),
-              detail: `${activeExpenses.filter((r) => r.status !== "pago" && r.vencimento === todayISO()).length} vence(m) hoje`,
-              icon: "CalendarDays",
-              tone: "neutral",
-            },
-            {
-              label: "RECEITAS",
-              value: incomeTotal,
-              detail: `${activeIncomes.length} fontes de renda`,
-              icon: "TrendingUp",
-              tone: "income",
-            },
-            {
-              label: "SALDO",
-              value: balance,
-              detail: "receitas - despesas",
-              icon: "TrendingUp",
-              tone: "income",
-            },
-          ].map((s) => (
-            <div key={s.label} className={`stat ${s.tone}`}>
-              <div className="stat-top">
-                <span>{s.label}</span>
-                <Icon name={s.icon} size={15} />
-              </div>
-              <strong>{brl(s.value)}</strong>
-              <small>{s.detail}</small>
-              <div className="stat-track">
-                <span
-                  style={{
-                    width:
-                      s.label === "PAGO" && expenseTotal
-                        ? `${Math.min(100, (sum(paid) / expenseTotal) * 100)}%`
-                        : s.label === "ATRASADO" && expenseTotal
-                          ? `${Math.min(100, (sum(overdue) / expenseTotal) * 100)}%`
-                          : "0%",
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </section>
+        <ReferenceDashboard
+          month={month}
+          expenses={expenses}
+          incomes={incomes}
+          pending={pending}
+          overdue={overdue}
+          paid={paid}
+          onAddExpense={() => openForm("despesas")}
+          onAddIncome={() => openForm("receitas")}
+        />
         <div className="dashboard">
           <aside className="left-col">
             <section className="panel">
