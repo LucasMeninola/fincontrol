@@ -92,6 +92,11 @@ function App() {
     [trashOpen, setTrashOpen] = useState(false),
     [noticeOpen, setNoticeOpen] = useState(false);
 
+    // Retorna a navegação para o mês atual.
+    const voltarMesAtual = () => {
+    setMonth(currentMonth());
+    };
+
    // =====================================================
   // AUTENTICAÇÃO DO USUÁRIO
   // =====================================================
@@ -659,6 +664,18 @@ function App() {
             <button onClick={() => setMonth(changeMonth(month, 1))}>
               <Icon name="ChevronRight" />
             </button>
+
+            <button
+                type="button"
+                className="btn-mes-atual"
+                onClick={voltarMesAtual}
+                disabled={month === currentMonth()}
+                title="Voltar ao mês atual"
+            >
+                <Icon name="CalendarDays" size={15} />
+                Hoje
+            </button>
+
           </div>
           <div className="search">
             <Icon name="Search" size={15} />
