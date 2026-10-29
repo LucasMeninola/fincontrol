@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  match /users/{userId}/{kind}/{entryId} {
+   allow read, delete: if request.auth != null && request.auth.uid == userId && kind in ['despesas', 'receitas'];
+   allow create, update: if request.auth != null && request.auth.uid == userId && kind in ['despesas', 'receitas'] && request.resource.data.nome is string && request.resource.data.valor is number && request.resource.data.valor > 0 && request.resource.data.valor < 1000000000;
+  }
+ }
+}
