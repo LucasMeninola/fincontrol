@@ -579,7 +579,7 @@ function App() {
             {/* Logotipo personalizado do FinControl */}
             <div className="logo">
             <img
-                src="/formiga.svg"
+                src={`${import.meta.env.BASE_URL}formiga.svg`}
                 alt="Logotipo FinControl"
                 className="logo-image"
             />
@@ -678,7 +678,7 @@ function App() {
             {/* Logotipo personalizado do FinControl */}
             <div className="logo">
             <img
-                src="/formiga.svg"
+                src={`${import.meta.env.BASE_URL}formiga.svg`}
                 alt="Logotipo FinControl"
                 className="logo-image"
             />
