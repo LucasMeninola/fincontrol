@@ -1,3 +1,4 @@
+import DueTodayNotice from "./components/DueTodayNotice.jsx";
 import ReferenceDashboard from "./components/ReferenceDashboard.jsx";
 import ReferenceFeatures from "./components/ReferenceFeatures.jsx";
 import "./reference-features.css";
@@ -772,6 +773,7 @@ function App() {
             <button onClick={() => setNoticeOpen(false)}>Fechar</button>
           </div>
         )}
+        <DueTodayNotice user={user} expenses={expenses} loading={loading} />
         <ReferenceDashboard
           month={month}
           expenses={expenses}
