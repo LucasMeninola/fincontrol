@@ -1,0 +1,9 @@
+.fc-due-alert{display:flex;gap:12px;align-items:flex-start;padding:15px 16px;margin:0 0 16px;border:1px solid #fbbf24;border-radius:14px;background:#fffbeb;color:#78350f;box-shadow:0 3px 12px #00000008}
+.fc-due-alert-icon{flex-shrink:0;display:grid;place-items:center;background:#fef3c7;color:#b45309;border-radius:11px;width:36px;height:36px}
+.fc-due-alert-body{flex:1;min-width:0}.fc-due-alert-body strong{font-size:13px}.fc-due-alert-body p{font-size:12px;line-height:1.5;margin:5px 0 0;overflow-wrap:anywhere}
+.fc-due-permission{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:#92400e;color:white;padding:8px 10px;border-radius:9px;border:0;font-size:11px;font-weight:700;cursor:pointer}
+.fc-due-help{display:block;margin-top:8px;font-size:11px;line-height:1.4}
+.fc-due-close{flex-shrink:0;background:transparent;border:0;color:#92400e;cursor:pointer;padding:4px}
+.dark .fc-due-alert{background:#3f2b19;border-color:#92400e;color:#fef3c7}
+.dark .fc-due-alert-icon{background:#78350f;color:#fde68a}
+@media(max-width:600px){.fc-due-alert{padding:12px;gap:9px}}
